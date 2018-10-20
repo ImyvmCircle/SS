@@ -11,7 +11,6 @@ import cat.nyaa.nyaacore.Message;
 import org.bukkit.inventory.ItemStack;
 
 import static cat.nyaa.nyaacore.CommandReceiver.asPlayer;
-import static cat.nyaa.nyaacore.CommandReceiver.getItemInHand;
 
 /**
  * Created by huang on 2017/8/11.
