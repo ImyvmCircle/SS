@@ -2,6 +2,8 @@ name: ss
 main: com.imyvm.ss.Main
 description: "ss plugin for imyvm Minecraft Server"
 version: 0.1
+depend:
+- LangUtils
 authors: [huangwang]
 api-version: 1.14
 

@@ -85,7 +85,11 @@ public class Main extends JavaPlugin{
         Map<String, BaseComponent> varMap = new HashMap<>();
         TextComponent component_name = new TextComponent(name);
         component_name.setHoverEvent(event);
+        if (!(message.contains("{itemName}") && message.contains("{amount}"))) {
+            return;
+        }
 
+        // Need to recode
         int amount = item.getAmount();
         String message1 = message.substring(0, message.indexOf("{itemName}"));
         String message2 = message.substring(message.indexOf("{amount}") + "{amount}".length());
