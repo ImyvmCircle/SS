@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by huang on 2017/8/11.
@@ -50,12 +51,17 @@ public class Main extends JavaPlugin{
             }
             Player player = (Player) sender;
             ItemStack item = player.getInventory().getItemInMainHand();
-            if (item != null && !item.getType().equals(Material.AIR)) {
+            if (!item.getType().equals(Material.AIR)) {
                 String Message = config.getString("message");
                 Message = ChatColor.translateAlternateColorCodes('&', Message);
                 Message = Message.replace("{player}", sender.getName());
-                String name = LanguageHelper.getItemName(item, player);
-                sendItemTooltipMessage(Message, name, item);
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    String itemName = LanguageHelper.getItemName(item, p);
+                    if (Objects.requireNonNull(item.getItemMeta()).hasDisplayName()) {
+                        itemName = item.getItemMeta().getDisplayName();
+                    }
+                    sendItemTooltipMessage(Message, itemName, item, p);
+                }
             }else {
                 String Message2 = config.getString("noiteminhandmessage");
                 Message2 = ChatColor.translateAlternateColorCodes('&', Message2);
@@ -69,7 +75,7 @@ public class Main extends JavaPlugin{
         return false;
     }
 
-    public void sendItemTooltipMessage(String message, String name, ItemStack item) {
+    public void sendItemTooltipMessage(String message, String name, ItemStack item, Player player) {
         String itemJson = convertItemStackToJson(item);
 
         // Prepare a BaseComponent array with the itemJson as a text component
@@ -102,8 +108,9 @@ public class Main extends JavaPlugin{
             SendMessage.addExtra("*" + amount);
             SendMessage.addExtra(message2);
         }
-        // Finally, broadcast the message
-        getServer().spigot().broadcast(SendMessage);
+        // Finally, send the message
+        player.spigot().sendMessage(SendMessage);
+        // getServer().spigot().broadcast(SendMessage);
     }
 
     private String convertItemStackToJson(ItemStack itemStack) {
